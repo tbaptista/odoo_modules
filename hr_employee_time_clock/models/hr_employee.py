@@ -20,24 +20,24 @@
 #
 ##############################################################################
 
-{
-    'name': "Employee time clock",
-    'author': "Bytebrand GmbH",
-    'summary': 'Track over- and under-time, generate timesheets, upload public holidays',
-    'website': "http://www.bytebrand.net",
-    'category': 'Human Resources',
-    'version': '1.2',
-    'depends': ['hr_timesheet_sheet', 'hr_attendance', 'hr_contract', 'hr_holidays'], #,'hr_attendance_analysis'
-    'images': ['images/overundertime.png'],
-    'installable': True,
-    'data': [
-        'security/ir_rule.xml',
-        'security/ir.model.access.csv',
-        'views/views.xml',
-        # Report
-        'report/report_attendance_analysis_view.xml',
-        # View file for the wizard
-        'wizard/create_timesheet_with_tag_view.xml', 
-        'wizard/import_leave_requests_view.xml',
-    ]
-}
+
+from datetime import date
+from openerp import api, fields, models, _
+from openerp.exceptions import ValidationError
+
+
+class HrEmployee(models.Model):
+    _inherit = "hr.employee"
+    _description = "Employee"
+
+    @api.multi
+    def attendance_action_change(self):
+        hr_timesheet_sheet_sheet_pool = self.env['hr_timesheet_sheet.sheet']
+        hr_timesheet_ids = hr_timesheet_sheet_sheet_pool.search(
+            [('employee_id', '=', self.id),
+             ('date_from', '<=', date.today()),
+             ('date_to', '>=', date.today())])
+        if not hr_timesheet_ids:
+            raise ValidationError(
+                _('Please contact your manager to create timesheet for you.'))
+        return super(HrEmployee, self).attendance_action_change()

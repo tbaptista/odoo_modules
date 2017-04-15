@@ -20,24 +20,23 @@
 #
 ##############################################################################
 
-{
-    'name': "Employee time clock",
-    'author': "Bytebrand GmbH",
-    'summary': 'Track over- and under-time, generate timesheets, upload public holidays',
-    'website': "http://www.bytebrand.net",
-    'category': 'Human Resources',
-    'version': '1.2',
-    'depends': ['hr_timesheet_sheet', 'hr_attendance', 'hr_contract', 'hr_holidays'], #,'hr_attendance_analysis'
-    'images': ['images/overundertime.png'],
-    'installable': True,
-    'data': [
-        'security/ir_rule.xml',
-        'security/ir.model.access.csv',
-        'views/views.xml',
-        # Report
-        'report/report_attendance_analysis_view.xml',
-        # View file for the wizard
-        'wizard/create_timesheet_with_tag_view.xml', 
-        'wizard/import_leave_requests_view.xml',
-    ]
-}
+
+from openerp import http
+
+# class HrTimesheetOvertime(http.Controller):
+#     @http.route('/hr_timesheet_overtime/hr_timesheet_overtime/', auth='public')
+#     def index(self, **kw):
+#         return "Hello, world"
+
+#     @http.route('/hr_timesheet_overtime/hr_timesheet_overtime/objects/', auth='public')
+#     def list(self, **kw):
+#         return http.request.render('hr_timesheet_overtime.listing', {
+#             'root': '/hr_timesheet_overtime/hr_timesheet_overtime',
+#             'objects': http.request.env['hr_timesheet_overtime.hr_timesheet_overtime'].search([]),
+#         })
+
+#     @http.route('/hr_timesheet_overtime/hr_timesheet_overtime/objects/<model("hr_timesheet_overtime.hr_timesheet_overtime"):obj>/', auth='public')
+#     def object(self, obj, **kw):
+#         return http.request.render('hr_timesheet_overtime.object', {
+#             'object': obj
+#         })
